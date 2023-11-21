@@ -1,9 +1,34 @@
-import {GallItem, Img} from './ImageGalleryItem.styled'
+import { GallItem, Img } from './ImageGalleryItem.styled';
+import { ModalWindow } from '../Modal/Modal';
+import { Component } from 'react';
 
-export const ImageGalleryItem =  ({ image, onClick }) => {
-    return (
-      <GallItem className="gallery-item" onClick={() => onClick(image.largeImageURL)}>
-        <Img src={image.webformatURL} alt={image.type} width='300px'/>
-      </GallItem>
-    );
+export class ImageGalleryItem extends Component {
+  state = {
+    isOpen: false,
   };
+
+  openModal = () => {
+    this.setState({ isOpen: true });
+  };
+
+  onClose = () => {
+    this.setState({ isOpen: false });
+  };
+
+  render() {
+    const { isOpen } = this.state;
+    const { image, largeImageURL, tag } = this.props;
+
+    return (
+      <GallItem className="gallery-item">
+        <Img src={image} alt={tag} width="300px" onClick={this.openModal} />
+        <ModalWindow
+          isOpen={isOpen}
+          onClose={this.onClose}
+          imageURL={largeImageURL}
+          tags={tag}
+        />
+             </GallItem>
+    );
+  }
+}

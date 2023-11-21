@@ -4,7 +4,7 @@ import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { Button } from '../Button/Button';
 import { fetchImages } from 'api';
-
+import { Loader } from '../Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -12,54 +12,49 @@ export class App extends Component {
     images: [],
     page: 1,
     isLoading: false,
-    showModal: false,
-    selectedImage: '',
   };
 
   async componentDidMount() {
-   this.fetchData();
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.query !== this.state.query ||
-      prevState.page !== this.state.page
-    ) {
-      this.fetchData();
-    }
-  }
-
-  fetchData = async () => {
-    const { query, page } = this.state;
     try {
-      this.setState({ isLoading: true });
-  
-      const response = await fetchImages(query, page);
-      const newImages = response.hits;
-  
-      if (newImages && newImages.length === 0) {
-        console.error('No more images available');
-      } else {
-        this.setState(prevState => ({
-          images: [...prevState.images, ...(newImages || [])],
-        }));
-      }
+      this.setState({ isLoading: true, error: false });
     } catch (err) {
-      console.error('Error fetching images:', err);
+      this.setState({ error: true });
     } finally {
       this.setState({ isLoading: false });
     }
-  };
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    const { query, page } = this.state;
+    if (prevState.query !== query || prevState.page !== page) {
+      const clearQuery = query.split('/').pop();
+      try {
+        this.setState({ isLoading: true });
+        const response = await fetchImages(clearQuery, page);
+  
+       const newImages = response.data?.hits || [];
+  
+        if (newImages.length === 0) {
+          console.error('No more images available');
+        } else {
+          this.setState((prevState) => ({
+            images: [...prevState.images, ...newImages],
+          }));
+        }
+      } catch (err) {
+        console.error('Error fetching images:', err);
+      } finally {
+        this.setState({ isLoading: false });
+      }
+    }
+  }
 
   handleSubmit = query => {
-    this.setState(
-      {
-        query,
-        page: 1,
-        images: [],
-      },
-      this.fetchData
-    );
+    this.setState({
+      query,
+      page: 1,
+      images: [],
+    });
   };
 
   handleLoadMore = () => {
@@ -67,23 +62,9 @@ export class App extends Component {
       {
         page: this.state.page + 1,
       },
-      this.fetchData
     );
   };
 
-  handleImgClick = imageURL => {
-    this.setState({
-      showModal: true,
-      selectedImage: imageURL,
-    });
-  };
-
-  handleCloseModal = () => {
-    this.setState({
-      showModal: false,
-      selectedImage: '',
-    });
-  };
 
   render() {
     const { images, isLoading } = this.state;
@@ -93,9 +74,9 @@ export class App extends Component {
         <SearchBarContainer>
           <Searchbar onSubmit={this.handleSubmit} />
         </SearchBarContainer>
-        <ImageGallery images={images} onImgClick={this.handleImgClick} />
-
-        {images.length > 0 && !isLoading && (
+        {images.length > 0 && <ImageGallery images={images}/>}
+        {isLoading && <Loader />} 
+        {images.length > 0 && (
           <Button onClick={this.handleLoadMore} />
         )}
       </div>
