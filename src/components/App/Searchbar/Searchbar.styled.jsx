@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const InputContainer = styled.div`
   position: relative;
-  width: 300px; /* Adjust the width as needed */
+  width: 300px; 
 `;
 
 export const Input = styled.input`
