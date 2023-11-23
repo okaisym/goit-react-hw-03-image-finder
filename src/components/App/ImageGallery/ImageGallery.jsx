@@ -1,6 +1,7 @@
 import React from 'react';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
-import { GalleryList } from './ImageGallery.styled';
+import {GalleryList} from './ImageGallery.styled'
+
 
 export const ImageGallery = ({ images, onImgClick }) => {
   return (
@@ -9,7 +10,7 @@ export const ImageGallery = ({ images, onImgClick }) => {
         <ImageGalleryItem
           key={image.id}
           image={image.webformatURL}
-          largeImg={image.largeImageURL}
+          largeImageURL={image.largeImageURL}
           tag={image.tags}
           onClick={onImgClick}
         />

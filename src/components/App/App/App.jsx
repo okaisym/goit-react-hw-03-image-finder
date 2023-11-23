@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SearchBarContainer } from './App.styled';
+import { SearchBarContainer, Main } from './App.styled';
 import { Searchbar } from '../Searchbar/Searchbar';
 import { ImageGallery } from '../ImageGallery/ImageGallery';
 import { Button } from '../Button/Button';
@@ -70,7 +70,7 @@ export class App extends Component {
     const { images, isLoading } = this.state;
 
     return (
-      <div>
+      <Main>
         <SearchBarContainer>
           <Searchbar onSubmit={this.handleSubmit} />
         </SearchBarContainer>
@@ -79,7 +79,7 @@ export class App extends Component {
         {images.length > 0 && (
           <Button onClick={this.handleLoadMore} />
         )}
-      </div>
+      </Main>
     );
   }
 }

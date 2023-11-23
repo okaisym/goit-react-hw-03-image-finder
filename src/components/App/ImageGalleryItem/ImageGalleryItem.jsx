@@ -1,4 +1,4 @@
-import { GallItem, Img } from './ImageGalleryItem.styled';
+import { Img } from './ImageGalleryItem.styled';
 import { ModalWindow } from '../Modal/Modal';
 import { Component } from 'react';
 
@@ -20,15 +20,15 @@ export class ImageGalleryItem extends Component {
     const { image, largeImageURL, tag } = this.props;
 
     return (
-      <GallItem className="gallery-item">
+      <li className="gallery-item">
         <Img src={image} alt={tag} width="300px" onClick={this.openModal} />
         <ModalWindow
           isOpen={isOpen}
           onClose={this.onClose}
-          imageURL={largeImageURL}
+          largeImageURL={largeImageURL}
           tags={tag}
         />
-             </GallItem>
+             </li>
     );
   }
 }

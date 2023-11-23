@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Input } from './Searchbar.styled';
+import { Input, SearchBtn, InputContainer } from './Searchbar.styled';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 export class Searchbar extends Component {
   constructor(props) {
@@ -17,13 +19,14 @@ export class Searchbar extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.onSubmit(this.state.query);
-    this.setState({ query: '' }); // Clear the input after submission
+    this.setState({ query: '' });
   };
 
   render() {
     return (
       <header className="searchbar">
         <form className="form" onSubmit={this.handleSubmit}>
+        <InputContainer>
           <Input
             className="input"
             type="text"
@@ -33,9 +36,10 @@ export class Searchbar extends Component {
             value={this.state.query}
             onChange={this.handleChange}
           />
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
-          </button>
+          <SearchBtn type="submit" className="button">
+          <FontAwesomeIcon icon={faSearch} />
+          </SearchBtn>
+          </InputContainer>
         </form>
       </header>
     );

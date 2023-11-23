@@ -36,12 +36,12 @@ export const ModalWindow = ({ isOpen, onClose, largeImageURL, tags }) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onRequestClose={onClose}
       className="modal"
       overlayClassName="overlay"
       style={customStyles}
     >
-      <img src={largeImageURL} alt={tags} />
+      <img src={largeImageURL} alt={tags} style={{ maxWidth: '700px', maxHeight: '450px' }}/>
     </Modal>
   );
 };
